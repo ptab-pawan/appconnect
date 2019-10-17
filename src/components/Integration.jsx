@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-
+import Nav from '../navigation/Navigation'
 export default class Integration  extends Component{
 
 render() {
       
         return (
-          <div className="Integration">
+          <div>
+            <Nav />
               <br/>
             <h3>Integration</h3>
              <br/>

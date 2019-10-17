@@ -5,7 +5,7 @@ function Nav() {
   return (
       <nav >
           <h3>IBM App Connect</h3>
-          <h4> John Doe</h4>
+          <h4> appconnect7788</h4>
           {/* <ul className = "nav-links">
               <li> Dashboard</li>
               <li>Twilio Integration</li>

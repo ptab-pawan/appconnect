@@ -1,18 +1,31 @@
 import React, {Component} from 'react'
 import GoogleLogin from 'react-google-login';
 import '../App.css';
- 
+import { Redirect } from 'react-router-dom'
+
 export default class Login  extends Component{
   state = {
     emailID: '',
     googleId: '',
-    accessToken : ''
+    accessToken : '',
+    redirect: false
   };
 
   componentDidMount() {
     const emailID = localStorage.getItem('emailID');
     const accessToken = localStorage.getItem('accessToken');
     this.setState({ emailID, accessToken });
+  }
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+   // if (this.state.redirect) {
+     console.log("redirect");
+      return <Redirect to='/termsofuse' />
+   // }
   }
     render() {
         const responseGoogle = (response) => {
@@ -27,6 +40,7 @@ export default class Login  extends Component{
           const { emailID, accessToken } = this.state;
           localStorage.setItem('emailID', emailID);
           localStorage.setItem('accessToken', accessToken);
+          this.renderRedirect();
         }
     
         return (

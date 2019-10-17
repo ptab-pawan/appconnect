@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-
+import Nav from '../navigation/Navigation'
 export default class Dashboard  extends Component{
 
 render() {
       
         return (
-          <div className="Dashboard">
+          <div>
+            <Nav />
               <br/>
             <h3>Dashboard</h3>
              <br/>
