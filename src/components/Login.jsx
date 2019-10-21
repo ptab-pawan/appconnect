@@ -1,32 +1,52 @@
 import React, {Component} from 'react'
 import GoogleLogin from 'react-google-login';
 import '../App.css';
-import { Redirect } from 'react-router-dom'
+import {
+  Redirect
+} from "react-router-dom";
+import googleClientId from '../config';
 
 export default class Login  extends Component{
   state = {
     emailID: '',
     googleId: '',
     accessToken : '',
-    redirect: false
+    firstTimeSignIn :false,
+    redirect: false ,
   };
 
+  constuctor() {
+    //this.routeChange = this.routeChange.bind(this);
+  }
   componentDidMount() {
     const emailID = localStorage.getItem('emailID');
     const accessToken = localStorage.getItem('accessToken');
-    this.setState({ emailID, accessToken });
+    const firstTimeSignIn = localStorage.getItem('firstTimeSignIn');
+    this.setState({ emailID, accessToken ,firstTimeSignIn });
+    console.log("Login component mount first time sign in", this.state.firstTimeSignIn);
   }
   setRedirect = () => {
+    console.log("setRedirect");
     this.setState({
       redirect: true
     })
   }
-  renderRedirect = () => {
-   // if (this.state.redirect) {
-     console.log("redirect");
-      return <Redirect to='/termsofuse' />
-   // }
+  routeChange = () => {
+    if (this.state.redirect) {
+      console.log(" route change: first time sign in ", this.state.firstTimeSignIn);
+      if(this.state.firstTimeSignIn){ //check if user is signing in first time
+        localStorage.setItem('firstTimeSignIn',false);
+        return <Redirect to='/termsofuse' />
+      }else { // take user to integration screen
+        return <Redirect to='/integration' />
+      }
+    }
   }
+  /* routeChange() {
+      let path = `/termsofuse`;
+      this.props.history.push(path);
+    
+  } */
     render() {
         const responseGoogle = (response) => {
           console.log(response);
@@ -36,11 +56,13 @@ export default class Login  extends Component{
           console.log(responseJson);
           // console.log(responseJson['profileObj']['googleId']);
           // console.log(responseJson['profileObj']['email']);
-          this.setState({emailID : responseJson['profileObj']['email'] , accessToken : responseJson['accessToken'],googleId :responseJson['profileObj']['googleId']  })
-          const { emailID, accessToken } = this.state;
+          this.setState({emailID : responseJson['profileObj']['email'] , accessToken : responseJson['accessToken'],googleId :responseJson['profileObj']['googleId'] , firstTimeSignIn :true })
+          const { emailID, accessToken , firstTimeSignIn } = this.state;
           localStorage.setItem('emailID', emailID);
           localStorage.setItem('accessToken', accessToken);
-          this.renderRedirect();
+          localStorage.setItem('firstTimeSignIn',true);
+          //this.routeChange();
+          this.setRedirect();
         }
     
         return (
@@ -49,8 +71,9 @@ export default class Login  extends Component{
                 <h3>Please login to your google account to try IBM connect Integration flow for free.</h3>
             </div>
             <div className = "googleLogin">
+            {this.routeChange()}
                 <GoogleLogin
-                clientId="783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com" 
+                clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com" 
                 buttonText="LOGIN WITH GOOGLE"
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}

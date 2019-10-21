@@ -1,5 +1,7 @@
-import React, {Component} from 'react'
-import Nav from '../navigation/Navigation'
+import React, {Component} from 'react';
+import Nav from '../navigation/Navigation';
+import '../styles/common.css';
+
 export default class Integration  extends Component{
 
 render() {
@@ -17,3 +19,4 @@ render() {
         );
       }
 }
+

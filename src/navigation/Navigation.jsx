@@ -1,18 +1,47 @@
-import React from "react";
+import React , {Component} from "react";
 import '../App.css';
+import { GoogleLogout } from 'react-google-login';
+import {
+    Redirect
+  } from "react-router-dom";
+  import googleClientId from '../config';
 
-function Nav() {
-  return (
-      <nav >
-          <h3>IBM App Connect</h3>
-          <h4> appconnect7788</h4>
-          {/* <ul className = "nav-links">
-              <li> Dashboard</li>
-              <li>Twilio Integration</li>
-          </ul> */}
-      </nav>
-  );
-
+ class Nav  extends Component{
+    state = {
+        redirect: false
+      };
+      setRedirect = () => {
+        console.log("setRedirect");
+        this.setState({
+          redirect: true
+        })
+      }
+      routeChange = () => {
+        if (this.state.redirect) {
+            return <Redirect to ='/' />
+        }
+      }
+    render() {
+        const logout = (response) => {
+            console.log(response);
+            //clear local storage
+            localStorage.clear()
+            this.setRedirect();
+        }
+    return (
+        <nav >
+             {this.routeChange()}
+            <h3>IBM App Connect</h3>
+            <h4> John Doe</h4>
+            <GoogleLogout
+                clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com"
+                buttonText="Logout"
+                onLogoutSuccess={logout}
+                >
+            </GoogleLogout>
+        </nav>
+    );
+  }
 }
 
 export default Nav;

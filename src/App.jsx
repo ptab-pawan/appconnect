@@ -7,7 +7,7 @@ import Login from './components/Login';
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,withRouter ,Redirect
   } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Integration from "./components/Integration";
@@ -16,24 +16,54 @@ import TwilioIntegration from "./components/TwilioIntegration";
 import SetTwilioDetails from "./components/SetTwilioDetails";
 import TermsOfUse from './modals/TermsofUse';
 
-export default class App extends Component {
+ class App extends Component {
   state = {
     isUserSignedIn: false,
     accessToken: '',
-    emailID: ''
+    emailID: '',
+    redirect : false 
   }
-
+  constuctor() {
+   // this.routeChange = this.routeChange.bind(this);
+  }
    componentDidMount() {
+   // For testing purpose :  
+   localStorage.clear()
     this.checkLocalSotrage();
   }
+  /* routeChange(isUserSignedIn) {
+    if(isUserSignedIn) {
+      this.props.history.push(`/integration`);
+    }else {
+      this.props.history.push(`/termsofuse`);
+    }
+}*/
+setRedirect = () => {
+  this.setState({
+    redirect: true
+  })
+}
+renderRedirect = () => {
+  if (this.state.redirect) {
+    if (this.state.isUserSignedIn){
+      return <Redirect to='/integration' />
+    }else {
+      return <Redirect to ='/' />
+    }
+    
+  }
+}
 
    checkLocalSotrage() {
     const emailID = localStorage.getItem('emailID');
     const accessToken = localStorage.getItem('accessToken');
-    const isUserSignedIn = (emailID!== '') ? true  : false;
-    console.log(isUserSignedIn);
+    console.log('emailID',emailID);
+    const isUserSignedIn = (emailID!== null && emailID!== '') ? true  : false;
+    console.log('isUserSignedIn',isUserSignedIn);
     this.setState({ emailID : emailID, accessToken:accessToken , isUserSignedIn : isUserSignedIn});
     console.log("Email ID", emailID);
+   //this.routeChange(isUserSignedIn);
+   this.setRedirect();
   }  
 
   render() {
@@ -41,7 +71,7 @@ export default class App extends Component {
     return (
       <Router>
            <div className ="App">
-            
+           {this.renderRedirect()}
             <Switch>
               <Route exact path="/"   component= {Login} />
               <Route path= "/termsofuse"   component= {TermsOfUse} />
@@ -61,9 +91,6 @@ export default class App extends Component {
   }
 }
 
-const Home =() => (
-  <div>
-    <h3> Home</h3>
-  </div>
-);
+export default App
+
 
