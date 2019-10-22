@@ -1,12 +1,14 @@
-import React , {Component} from "react";
+import React  from "react";  //, {Component}
 import '../App.css';
 import { GoogleLogout } from 'react-google-login';
 import {
-    Redirect
+    Redirect ,Link
   } from "react-router-dom";
   import googleClientId from '../config';
 
- class Nav  extends Component{
+  import '../styles/common.css';
+  import NavBar, { ElementsWrapper } from 'react-scrolling-nav';
+ class Nav  extends  React.PureComponent{
     state = {
         redirect: false
       };
@@ -21,25 +23,69 @@ import {
             return <Redirect to ='/' />
         }
       }
-    render() {
-        const logout = (response) => {
+    // render() {
+    //     const logout = (response) => {
+    //         console.log(response);
+    //         //clear local storage
+    //         localStorage.clear()
+    //         this.setRedirect();
+    //     }
+    
+        render() {
+
+            const logout = (response) => {
             console.log(response);
             //clear local storage
             localStorage.clear()
             this.setRedirect();
-        }
+            }
+            const navbarItems = [{
+                label: "IBM App Connect",
+                target: "item-1"
+            }, {
+                label: "John Doe",
+                target: "item-2"
+            }]
+    //         return (
+    //             <div>
+    //                  {this.routeChange()}
+    //                  <h3>IBM App Connect</h3>
+    //         <h4> John Doe</h4>
+    //                 <GoogleLogout
+    //             clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com"
+    //             buttonText="Logout"
+    //             onLogoutSuccess={logout}
+    //             >
+    //         </GoogleLogout>
+    //             </div>
+    //         );
+    //     }
+    // }
     return (
+        //   <ul className= 'pure-menu-list'>
+        //      <li className = 'pure-menu-item'>
+        //          <Link  className ={classNames ('pure-menu-link', links)}>
+        //          </Link>
+        //      </li>
+        //      <li>
+        //          <Link>
+        //          </Link>
+        //      </li>
+        //  </ul> 
         <nav >
              {this.routeChange()}
-            <h3>IBM App Connect</h3>
-            <h4> John Doe</h4>
-            <GoogleLogout
+           
+            
+            <GoogleLogout className='logout_button'
                 clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com"
                 buttonText="Logout"
                 onLogoutSuccess={logout}
                 >
             </GoogleLogout>
-        </nav>
+            <h4 className ='content_h4' id="expand_other_events">John Doe</h4>
+            <h3 className ='content_h3'>IBM App Connect</h3>
+            
+        </nav> 
     );
   }
 }

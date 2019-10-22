@@ -5,7 +5,9 @@ import {
   Redirect
 } from "react-router-dom";
 import googleClientId from '../config';
-
+import TermsOfUse from '../modals/TermsofUse';
+import $ from 'jquery';
+//import '../styles/modal.css';
 export default class Login  extends Component{
   state = {
     emailID: '',
@@ -13,6 +15,7 @@ export default class Login  extends Component{
     accessToken : '',
     firstTimeSignIn :false,
     redirect: false ,
+    showModal:false
   };
 
   constuctor() {
@@ -26,18 +29,22 @@ export default class Login  extends Component{
     console.log("Login component mount first time sign in", this.state.firstTimeSignIn);
   }
   setRedirect = () => {
-    console.log("setRedirect");
+    console.log("login setRedirect");
     this.setState({
-      redirect: true
+      redirect: true,
+      showModal: false
     })
   }
   routeChange = () => {
     if (this.state.redirect) {
       console.log(" route change: first time sign in ", this.state.firstTimeSignIn);
       if(this.state.firstTimeSignIn){ //check if user is signing in first time
-        localStorage.setItem('firstTimeSignIn',false);
-        return <Redirect to='/termsofuse' />
-      }else { // take user to integration screen
+        console.log("if");
+       return <Redirect to= '/termsofuse'   />
+      //  this.showModal();
+      }
+      else { // take user to integration screen
+        console.log("else");
         return <Redirect to='/integration' />
       }
     }
@@ -47,6 +54,41 @@ export default class Login  extends Component{
       this.props.history.push(path);
     
   } */
+ /*
+  hideAttestationModal() {
+    $('#attestationModal').modal('hide');
+  }
+  showAttestationModal() {
+  
+        $('#attestationModal').modal('show');
+
+  }
+
+  attestationModal = () => {
+    return (
+      <div id="attestationModal" className="modal fade" ref={modal => this.modal = modal} >
+        <div className="modal-dialog" role="document" style={{ minWidth: '1200px' }}>
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Issue Attestation</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+           </div>
+        </div>
+      </div>
+    )
+  } */
+
+  showModal = () => {
+    this.setState({ showModal: true });
+  };
+
+  hideModal = () => {
+    this.setState({ showModal: false });
+  };
+
     render() {
         const responseGoogle = (response) => {
           console.log(response);
@@ -67,18 +109,28 @@ export default class Login  extends Component{
     
         return (
           <div>
-            <div className="googleLogin">
-                <h3>Please login to your google account to try IBM connect Integration flow for free.</h3>
-            </div>
-            <div className = "googleLogin">
-            {this.routeChange()}
-                <GoogleLogin
-                clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com" 
-                buttonText="LOGIN WITH GOOGLE"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                />
-            </div>
+              <div className="googleLogin">
+                  <h3>Please login to your google account to try IBM connect Integration flow for free.</h3>
+              </div>
+              <div className = "googleLogin">
+                {this.routeChange()}
+                  <GoogleLogin
+                  clientId= "783846295086-uetrevvm3t5hmcsjdt4m9amlpfl7lh7f.apps.googleusercontent.com" 
+                  buttonText="LOGIN WITH GOOGLE"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  />
+              </div>
+               {/* <div>
+               <button
+                class="toggle-button"
+                id="centered-toggle-button"
+                onClick={e => {
+                this.showModal(e);
+                }}
+                ></button> 
+              
+              </div>*/}
           </div>
         );
       }

@@ -46,8 +46,10 @@ setRedirect = () => {
 renderRedirect = () => {
   if (this.state.redirect) {
     if (this.state.isUserSignedIn){
+      console.log("App.js if");
       return <Redirect to='/integration' />
     }else {
+      console.log("App.js else");
       return <Redirect to ='/' />
     }
     
